@@ -98,7 +98,7 @@ class ColoredMNIST(datasets.VisionDataset):
     def __len__(self):
         return len(self.data_label_tuples)
 
-    def prepare_colored_mnist(self):
+    def prepare_colored_mnist(self, noOfEnviroments = 2):
         colored_mnist_dir = os.path.join(self.root, 'ColoredMNIST')
         if os.path.exists(os.path.join(colored_mnist_dir, 'train1.pt')) \
                 and os.path.exists(os.path.join(colored_mnist_dir, 'train2.pt')) \
@@ -121,26 +121,28 @@ class ColoredMNIST(datasets.VisionDataset):
             # Assign a binary label y to the image based on the digit
             binary_label = 0 if label < 5 else 1
 
-        #   # Flip label with 25% probability
-        #   if np.random.uniform() < 0.25:
-        #     binary_label = binary_label ^ 1
+    
 
             # Color the image either red or green according to its possibly flipped label
             color_red = binary_label == 0
 
-            # Flip the color with a probability e that depends on the environment
-            if idx < 20000:
-                # 20% in the first training environment
-                if np.random.uniform() < 0.2:
-                    color_red = not color_red
-            elif idx < 40000:
-                # 10% in the first training environment
-                if np.random.uniform() < 0.1:
-                    color_red = not color_red
-            else:
-                # 90% in the test environment
-                if np.random.uniform() < 0.9:
-                    color_red = not color_red
+            if noOfEnviroments == 2:
+                """ 
+                    Default behavior
+                """
+                # Flip the color with a probability e that depends on the environment
+                if idx < 20000:
+                    # 20% in the first training environment
+                    if np.random.uniform() < 0.4:
+                        color_red = not color_red
+                elif idx > 40000:
+                    # 10% in the first training environment
+                    if np.random.uniform() < 0.2:
+                        color_red = not color_red
+                else:
+                    # 90% in the test environment
+                    if np.random.uniform() < 0.9:
+                        color_red = not color_red
 
             colored_arr = color_grayscale_arr(im_array, red=color_red)
 
@@ -151,11 +153,10 @@ class ColoredMNIST(datasets.VisionDataset):
                 with open("dataset/CMNIST/Train1/labels.txt", "a") as file_object:
                     file_object.write(str(idx) + ".jpg" +
                                       ", " + str(binary_label) + "\n")
-            elif idx < 40000:
+            elif idx > 40000:
                 train2_set.append((Image.fromarray(colored_arr), binary_label))
                 im = Image.fromarray(colored_arr)
                 im.save("dataset/CMNIST/Train2/{}.jpg".format(idx))
-
                 with open("dataset/CMNIST/Train2/labels.txt", "a") as file_object:
                     file_object.write(str(idx) + ".jpg" +
                                       ", " + str(binary_label) + "\n")
@@ -182,6 +183,6 @@ class ColoredMNIST(datasets.VisionDataset):
 
 
 prepare()
-train1_set = ColoredMNIST(root="./data", env="train1")
+train1_set = ColoredMNIST(root="./data", env="all_train")
 
 print("Successfully download and created MNIST colored data! The dataset can be found in the \"datasets folder\"")
