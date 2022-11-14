@@ -175,6 +175,7 @@ class ColoredMNIST(datasets.VisionDataset):
             # plt.imshow(colored_arr)
             # plt.show()
             # break
+            # TIl Jacob
 
         # dataset_utils.makedir_exist_ok(colored_mnist_dir)
         torch.save(train1_set, os.path.join(colored_mnist_dir, 'train1.pt'))
