@@ -121,7 +121,9 @@ class ColoredMNIST(datasets.VisionDataset):
             # Assign a binary label y to the image based on the digit
             binary_label = 0 if label < 5 else 1
 
-    
+            # Flip label with 25% probability
+            if np.random.uniform() < 0.25:
+                binary_label = 0 if binary_label == 1 else 1#binary_label ^ 1
 
             # Color the image either red or green according to its possibly flipped label
             color_red = binary_label == 0
@@ -133,11 +135,11 @@ class ColoredMNIST(datasets.VisionDataset):
                 # Flip the color with a probability e that depends on the environment
                 if idx < 20000:
                     # 20% in the first training environment
-                    if np.random.uniform() < 0.4:
+                    if np.random.uniform() < 0.2:
                         color_red = not color_red
                 elif idx > 40000:
                     # 10% in the first training environment
-                    if np.random.uniform() < 0.2:
+                    if np.random.uniform() < 0.1:
                         color_red = not color_red
                 else:
                     # 90% in the test environment
