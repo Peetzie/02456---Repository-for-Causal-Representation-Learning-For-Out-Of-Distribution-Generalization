@@ -17,3 +17,9 @@ dataset/
 #   git rm -r .ipynb_checkpoints/
 __pycache__/plotting.cpython-38.pyc
 *.pyc
+100epochs_NF_iVAE.pt
+100epochs_NF_iVAE_var005.pt
+100epochs_NF_iVAE_var01.pt
+NF-iVAE100-var005-Classify50.png
+NF-iVAE100-var01-Classify50.png
+NF-iVAE100epochs.png
