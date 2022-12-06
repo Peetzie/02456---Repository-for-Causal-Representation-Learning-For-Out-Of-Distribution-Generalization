@@ -171,12 +171,12 @@ class ColoredMNIST(datasets.VisionDataset):
                                       ", " + str(binary_label) + "\n")
 
             # Debug
-            # print('original label', type(label), label)
-            # print('binary label', binary_label)
-            # print('assigned color', 'red' if color_red else 'green')
-            # plt.imshow(colored_arr)
-            # plt.show()
-            # break
+            print('original label', type(label), label)
+            print('binary label', binary_label)
+            print('assigned color', 'red' if color_red else 'green')
+            #plt.imshow(colored_arr)
+            #plt.show()
+            #break
             # TIl Jacob
 
         # dataset_utils.makedir_exist_ok(colored_mnist_dir)
