@@ -98,7 +98,7 @@ class ColoredMNIST(datasets.VisionDataset):
     def __len__(self):
         return len(self.data_label_tuples)
 
-    def prepare_colored_mnist(self, noOfEnviroments = 2):
+    def prepare_colored_mnist(self, noOfEnviroments=2):
         colored_mnist_dir = os.path.join(self.root, 'ColoredMNIST')
         if os.path.exists(os.path.join(colored_mnist_dir, 'train1.pt')) \
                 and os.path.exists(os.path.join(colored_mnist_dir, 'train2.pt')) \
@@ -123,7 +123,7 @@ class ColoredMNIST(datasets.VisionDataset):
 
             # Flip label with 25% probability
             if np.random.uniform() < 0.25:
-                binary_label = 0 if binary_label == 1 else 1#binary_label ^ 1
+                binary_label = 0 if binary_label == 1 else 1  # binary_label ^ 1
 
             # Color the image either red or green according to its possibly flipped label
             color_red = binary_label == 0
