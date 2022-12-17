@@ -14,19 +14,9 @@ class ReparameterizedDiagonalGaussian(Distribution):
         self.mu = mu
         self.sigma = log_sigma.exp()
         
-    #def sample_epsilon(self) -> Tensor:
-    #    """`\eps ~ N(0, I)`"""
-    #    return torch.empty_like(self.mu).normal_()
-        
-    #def sample(self) -> Tensor:
-    #    """sample `z ~ N(z | mu, sigma)` (without gradients)"""
-    #    with torch.no_grad():
-    #        return self.rsample()
-        
-    #def rsample(self) -> Tensor:
-    #    """sample `z ~ N(z | mu, sigma)` (with the reparameterization trick) """
-    #    self.z = torch.distributions.Normal(self.mu, self.sigma)
-    #    return self.z.rsample() # <- your code
+    def sample(self) -> Tensor:
+        """sample `z ~ N(z | mu, sigma)` (with the reparameterization trick) """
+        return torch.normal(mean = self.mu, std = self.sigma)
         
     def rsample(self) -> Tensor:
         """sample `z ~ N(z | mu, sigma)` (with the reparameterization trick) """
@@ -41,7 +31,3 @@ class ReparameterizedDiagonalGaussian(Distribution):
     
     def mu(self):
         return(self.mu, self.sigma)
-    #def log_prob(self, z:Tensor) -> Tensor:
-    #    """return the log probability: log `p(z)`"""
-    #    dummy = self.rsample()
-    #    return self.z.log_prob(z) # <- your code

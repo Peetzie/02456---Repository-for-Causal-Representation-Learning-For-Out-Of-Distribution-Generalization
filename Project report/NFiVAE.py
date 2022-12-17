@@ -6,7 +6,7 @@ from functools import reduce
 from torch.distributions import Normal
 from typing import *
 
-import ReparameterizedDiagonalGaussian
+from ReparameterizedDiagonalGaussian import ReparameterizedDiagonalGaussian
 
 
 

@@ -6,7 +6,7 @@ from torch.distributions import Distribution
 from torch.distributions import Normal
 from typing import *
 
-import ReparameterizedDiagonalGaussian
+from ReparameterizedDiagonalGaussian import ReparameterizedDiagonalGaussian
 
 def reduce(x:Tensor) -> Tensor:
     """for each datapoint: sum over all dimensions"""
