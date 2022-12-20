@@ -3,7 +3,6 @@ seaborn
 matplotlib
 scikit-image
 scikit-learn
-numpy
 
 ### Version specifics ### 
 ## GPU BASED ##
