@@ -2,7 +2,7 @@
 import torch
 from torch import nn, Tensor
 from torch.distributions import Distribution
-# from functools import reduce
+from functools import reduce
 from torch.distributions import Normal
 import numpy as np
 from typing import *
@@ -67,9 +67,10 @@ class VAE_synth(nn.Module):
     def observation_model(self, z:Tensor) -> Distribution:
         """return the distribution `p(x|z)`"""
         px_mean = self.decoder(z)
-        px_mean = px_mean.view(-1, *self.input_shape) # reshape the output
+        px_mean = px_mean.view(-1, *self.input_shape)
         log_var = 0.01 * torch.ones(px_mean.shape)
         log_sigma = torch.log(torch.sqrt(log_var))
+
         return ReparameterizedDiagonalGaussian(mu = px_mean, log_sigma = log_sigma)
         
 
@@ -125,20 +126,16 @@ class VAE_synth(nn.Module):
         px, pz, qz, z = [outputs[k] for k in ["px", "pz", "qz", "z"]]
         
         # evaluate log probabilities
-        log_px = self.reduce(px.log_prob(x)) #log(p(x|z)): Sandsynligheden for at observere vores input variabel x
-        #givet vores latent space (tjekker modellens evne til at rekonstruere sig selv, ved at maximere sandsynlig-
-        #heden for at observere inputtet selv, givet det konstruerede latent space.
-        log_pz = self.reduce(pz.log_prob(z)) #log(p(z)): Sandsynligheden for at observere vores latent space, givet at
-        #latent space følger en standard-normal fordeling (Jo højere sandsynlighed jo bedre)
-        log_qz = self.reduce(qz.log_prob(z)) #log(q(z|x)): Sandsynligheden for at generere netop dette latent space givet 
-        #vores input billede x. Denne værdi skal helst være lav?
+        log_px = self.reduce(px.log_prob(x)) #log(p(x|z))
+        log_pz = self.reduce(pz.log_prob(z)) #log(p(z))
+        log_qz = self.reduce(qz.log_prob(z)) #log(q(z|x))
         
         # compute the ELBO with and without the beta parameter: 
         # `L^\beta = E_q [ log p(x|z) ] - \beta * D_KL(q(z|x) | p(z))`
         # where `D_KL(q(z|x) | p(z)) = log q(z|x) - log p(z)`
         #########################################################################################################
         # Reconstruction loss: E_q [ log p(x|z) ]
-        # Regularization term: \beta * D_KL(q(z|x) | p(z))` => Forsøger at tvinge fordelingen q(z|x) mod N(0,1)?
+        # Regularization term: \beta * D_KL(q(z|x) | p(z))`
         #########################################################################################################
         kl = log_qz - log_pz
         elbo = log_px - kl
