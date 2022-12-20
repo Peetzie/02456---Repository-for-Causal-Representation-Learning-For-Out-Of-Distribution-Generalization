@@ -153,20 +153,42 @@ class VariationalAutoencoder(nn.Module):
         return {'px': px, 'pz': pz, 'qz': qz, 'z': z}
     
     
-    def sample_from_prior(self, batch_size:int=100):
-        """sample z~p(z) and return p(x|z)"""
+    def reduce(self, x:Tensor) -> Tensor:
+        """for each datapoint: sum over all dimensions"""
+        return x.view(x.size(0), -1).sum(dim=1)
+
+    def VariationalInference(self, x, beta):
+        self.beta = beta
+
+        # Run encoder - decoder forward pass to get the probabilities px, pz, qz and the used latent space sample z.
+        outputs = self.forward(x)
+        px, pz, qz, z = [outputs[k] for k in ["px", "pz", "qz", "z"]]
         
-        # Laver bare reconstruction baseret på latent space
-        #Kan evt. fjernes. Anvendes bare til at vise hvor god modellen er til at generere data baseret på
-        #latent space genererede data. Funktionen anvendes kun i make_vae_plots.
+        #log probabilities
+        log_px = self.reduce(px.log_prob(x)) #log(p(x|z)): Probability of observing our input x, given our latent space - how good is the model recontruction?
+        #givet vores latent space (tjekker modellens evne til at rekonstruere sig selv, ved at maximere sandsynlig-
+        #heden for at observere inputtet selv, givet det konstruerede latent space.
+        log_pz = self.reduce(pz.log_prob(z)) #log(p(z)): Sandsynligheden for at observere vores latent space, givet at
+        #latent space følger en standard-normal fordeling (Jo højere sandsynlighed jo bedre)
+        log_qz = self.reduce(qz.log_prob(z)) #log(q(z|x)): Sandsynligheden for at generere netop dette latent space givet 
+        #vores input billede x. Denne værdi skal helst være lav?
         
-        # degine the prior p(z)
-        pz = self.prior(batch_size=batch_size)
+        # compute the ELBO with and without the beta parameter: 
+        # `L^\beta = E_q [ log p(x|z) ] - \beta * D_KL(q(z|x) | p(z))`
+        # where `D_KL(q(z|x) | p(z)) = log q(z|x) - log p(z)`
+        #########################################################################################################
+        # Reconstruction loss: E_q [ log p(x|z) ]
+        # Regularization term: \beta * D_KL(q(z|x) | p(z))` => Forsøger at tvinge fordelingen q(z|x) mod N(0,1)?
+        #########################################################################################################
+        kl = log_qz - log_pz
+        elbo = log_px - kl
+        beta_elbo = log_px - self.beta * kl
         
-        # sample the prior 
-        z = pz.rsample()
+        # loss
+        loss = -beta_elbo.mean()
         
-        # define the observation model p(x|z) = B(x | g(z))
-        px = self.observation_model(z)
-        
-        return {'px': px, 'pz': pz, 'z': z}
+        # prepare the output
+        with torch.no_grad():
+            diagnostics = {'elbo': elbo, 'log_px':log_px, 'kl': kl}
+            
+        return loss, diagnostics, outputs
