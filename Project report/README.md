@@ -49,4 +49,5 @@ More can be found [here](https://cran.r-project.org/web/packages/pcalg/index.htm
 
 ### Poster Session
 We have uploaded the poster from the poster session. It can be found [here](https://openreview.net/pdf?id=-e4EXDWXnSn)
+
 <img src="poster_thumbnail.jpg" alt="drawing" width="170"/>
