@@ -36,13 +36,13 @@ More can be found [here](https://cran.r-project.org/web/packages/pcalg/index.htm
 ## Additional info
 ### Authors
 - Morten Johnsen (s184334)
-- Peter Emil Carstensen (s174332)
+- Peter Emil Carstensen (s184332)
 - Jacob Bendsen (s184328)
 - Marie Pedersen (s174329)
 - Frederik Larsen (s174159)
 
 
 ### Poster Session
-We have uploaded the poster from the poster session. It can be found [here](https://openreview.net/pdf?id=-e4EXDWXnSn)
+We have uploaded the poster from the poster session. It can be found [here](https://github.com/Peetzie/02456_Final_Project/blob/main/Project%20report/02156_Deep_Learning___Poster___Project%20(1).pdf)
 
 <img src="poster_thumbnail.jpg" alt="drawing" width="170"/>
