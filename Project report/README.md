@@ -7,11 +7,6 @@ We attempt to recreate the results of
 [Lu et al 2022](https://openreview.net/pdf?id=-e4EXDWXnSn) in which they have created and implemented the iCaRL algorithm to gurantee out-of-distribution generalization. 
 
 
-## Short comments on the imlpementation
-- Implemented a fairly good NF-iVAE for synthetic data
-- The PC algorithm yielded inconsistent results
-- Comparing results from CMNIST we are not able to gurantee that our classification were based on causal parents of **Y**. As a consequence of the pc-algorithm not being stable. 
-
 ## Requirements
 In order to run the jupyter notebooks you must install the following packages 
 - Seaborn
