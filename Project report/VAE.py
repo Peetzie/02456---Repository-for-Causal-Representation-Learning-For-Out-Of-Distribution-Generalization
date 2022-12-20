@@ -115,7 +115,6 @@ class VariationalAutoencoder(nn.Module):
         px_loc = self.decoder(z)
         px_loc = px_loc.view(-1, *self.input_shape) # reshape the output #old
         shape = torch.ones(px_loc.shape)
-        shape = shape.to(self.device)
         shape = 0.1 * shape 
         #sandsynlighedsfordeling der giver 1 eller 0, baseret på log-odds givet i logits input fra p(x|z).
         #Dvs. at px_logits angiver sandsynligheden for at det givne pixel er henholdsvist rød,grøn,blå. Pixel værdien
