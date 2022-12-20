@@ -6,6 +6,7 @@ from torch.distributions import Distribution
 from torch.distributions import Normal
 from typing import *
 
+
 from ReparameterizedDiagonalGaussian import ReparameterizedDiagonalGaussian
 
 def reduce(x:Tensor) -> Tensor:
