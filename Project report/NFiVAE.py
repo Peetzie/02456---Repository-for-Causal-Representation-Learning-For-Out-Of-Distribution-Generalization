@@ -15,10 +15,11 @@ def reduce(x:Tensor) -> Tensor:
     return x.view(x.size(0), -1).sum(dim=1)
 
 class NFiVAE(nn.Module):
-    """A Variational Autoencoder with
-    * a Bernoulli observation model `p_\theta(x | z) = B(x | g_\theta(z))`
-    * a Gaussian prior `p(z) = N(z | 0, I)`
-    * a Gaussian posterior `q_\phi(z|x) = N(z | \mu(x), \sigma(x))`
+    """
+    Nonfactorised Variational Autoencoder.
+    * a Gaussian model decoder
+    * a Gaussian conditional prior `p(Z|Y,E) = N(Z_{Y} | 0, I)`
+    * a Gaussian conditional posterior `q_\phi(Z|X) = N(Z | \mu(x), \sigma(x))`
     """
     
     def __init__(self, input_shape:torch.Size, latent_features:int) -> None:
@@ -28,13 +29,8 @@ class NFiVAE(nn.Module):
         self.latent_features = latent_features
 
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-        
-        # define the parameters of the prior, chosen as p(z) = N(0, I)
-        ## setting the prior to a vector consisting of zeros with dimensions (1,2*latent_features)
-        # self.register_buffer('prior_params', torch.zeros(torch.Size([1, 2*latent_features])))
-        
         '''
-        According to page 31-32 the iVAE consist of 7 NNs:
+        According to page 31-32 of Lu et al the iVAE consist of 7 NNs:
         1. TNN prior
         2. lambdaNN prior
         3. lambdaf prior
