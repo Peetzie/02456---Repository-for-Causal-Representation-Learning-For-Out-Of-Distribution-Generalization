@@ -43,6 +43,6 @@ More can be found [here](https://cran.r-project.org/web/packages/pcalg/index.htm
 
 
 ### Poster Session
-We have uploaded the poster from the poster session. It can be found [here](https://github.com/Peetzie/02456_Final_Project/blob/main/Project%20report/02156_Deep_Learning___Poster___Project%20(1).pdf)
+We have uploaded the poster from the poster session. It can be found [here](https://github.com/Peetzie/02456_Final_Project/blob/main/02156_Deep_Learning___Poster___Project%20(1).pdf)
 
 <img src="poster_thumbnail.jpg" alt="drawing" width="170"/>
